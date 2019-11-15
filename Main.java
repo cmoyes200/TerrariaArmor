@@ -1,5 +1,4 @@
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -7,14 +6,29 @@ public class Main {
     private static double defense;
     private static String boss;
     private static boolean finished = false;
+    private Bosses bosses = new Bosses();
+    private DataAccess data = new DataAccess();
 
     public static void main (String args[]) {
         Main main = new Main();
-        DataAccess data = new DataAccess();
+        main.start();
+        main.addStats();
+        main.menu();
+    }
+
+
+    public void addStats() {
+        ArrayList<ArrayList<String>> stats = data.getAllStats();
+        for (int i=0; i<stats.size(); i++) {
+            bosses.getStats().get(i).add(data.getStatsstrings(i));
+        }
+    }
+
+    public void start() {
         data.load();
-        Bosses bosses = new Bosses();
+    }
 
-
+    public void menu() {
         while (finished !=true){
             System.out.println("Enter name of boss with no spaces e.g.'eyeofcthulhu': ");
             Scanner bossscanner = new Scanner(System.in);
@@ -24,41 +38,31 @@ public class Main {
 
             switch (boss) {
                 case "kingslime":
-                    System.out.println("King Slime deals " + main.netDamage(64) + " damage.");
-                    System.out.println("Spiked Blue Slime deals " + main.netDamage(28) + " melee damage and " + main.netDamage(36) + " ranged damage.");
-                    System.out.println("Normal Blue Slime deals " + main.netDamage(14) + " damage.");
+                    kingSlime();
                     break;
 
                 case "eyeofcthulhu":
-                    System.out.println("Eye of Cthulhu deals " + main.netDamage(30) + " damage in phase 1.");
-                    System.out.println("Eye of Cthulhu deals " + main.netDamage(36) + " damage in phase 2, and " + main.netDamage(40) + " damage below 4% health");
+                    eyeOfCthulhu();
                     break;
 
                 case "eaterofworlds":
-                    System.out.println("Eater of Worlds Head deals " + main.netDamage(48) + " damage.");
-                    System.out.println("Eater of Worlds body deals " + main.netDamage(20) + " damage.");
-                    System.out.println("Eater of Worlds Head deals " + main.netDamage(17) + " damage.");
+                    eaterOfWorlds();
                     break;
 
                 case "brainofcthulhu":
-                    System.out.println("Brain of Cthulhu deals " + main.netDamage(54) + " damage.");
-                    System.out.println("Creepers deal " + main.netDamage(54) + " damage.");
+                    brainOfCthulhu();
                     break;
 
                 case "queenbee":
-                    System.out.println("Queen Bee deals " + main.netDamage(54) + " melee damage.");
-                    System.out.println("Queen Bee deals " + main.netDamage(44) + " ranged damage.");
+                    queenBee();
                     break;
 
                 case "skeletron":
-                    System.out.println("Skeletron head deals " + main.netDamage(70) + " damage.");
-                    System.out.println("Skeletron limbs deal " + main.netDamage(44) + " damage.");
+                    skeletron();
                     break;
 
                 case "wallofflesh":
-                    System.out.println("Wall of Flesh deals " + main.netDamage(150) + " melee damage.");
-                    System.out.println("Wall of Flesh deals " + main.netDamage(44) + "-" + +main.netDamage(60) + " ranged damage, variable by remaining health.");
-                    System.out.println("The Hungry deal " + main.netDamage(60) + "-" + +main.netDamage(150) + " melee damage, variable by remaining health.");
+                    wallOfFlesh();
                     break;
             }
 
@@ -76,6 +80,61 @@ public class Main {
         }
     }
 
+    public void kingSlime() {
+        String stats = bosses.getStats().get(0).get(1);
+        String[] statsarray = stats.split(",", 0);
+        System.out.println("King Slime deals " + netDamage(Integer.parseInt(statsarray[0])) + " damage.");
+        System.out.println("Spiked Blue Slime deals " + netDamage(Integer.parseInt(statsarray[1])) + " melee damage and "
+                + netDamage(Integer.parseInt(statsarray[2])) + " ranged damage.");
+        System.out.println("Normal Blue Slime deals " + netDamage(Integer.parseInt(statsarray[3])) + " damage.");
+    }
+
+    public void eyeOfCthulhu() {
+        String stats = bosses.getStats().get(1).get(1);
+        String[] statsarray = stats.split(",", 0);
+        System.out.println("Eye of Cthulhu deals " + netDamage(Integer.parseInt(statsarray[0])) + " damage in phase 1.");
+        System.out.println("Eye of Cthulhu deals " + netDamage(Integer.parseInt(statsarray[1])) +
+                " damage in phase 2, and " + netDamage(Integer.parseInt(statsarray[2])) + " damage below 4% health");
+    }
+
+    public void eaterOfWorlds() {
+        String stats = bosses.getStats().get(2).get(1);
+        String[] statsarray = stats.split(",", 0);
+        System.out.println("Eater of Worlds Head deals " + netDamage(Integer.parseInt(statsarray[0])) + " damage.");
+        System.out.println("Eater of Worlds body deals " + netDamage(Integer.parseInt(statsarray[1])) + " damage.");
+        System.out.println("Eater of Worlds Head deals " + netDamage(Integer.parseInt(statsarray[2])) + " damage.");
+    }
+
+    public void brainOfCthulhu() {
+        String stats = bosses.getStats().get(3).get(1);
+        String[] statsarray = stats.split(",", 0);
+        System.out.println("Brain of Cthulhu deals " + netDamage(Integer.parseInt(statsarray[0])) + " damage.");
+        System.out.println("Creepers deal " + netDamage(Integer.parseInt(statsarray[1])) + " damage.");
+    }
+
+    public void queenBee() {
+        String stats = bosses.getStats().get(4).get(1);
+        String[] statsarray = stats.split(",", 0);
+        System.out.println("Queen Bee deals " + netDamage(Integer.parseInt(statsarray[0])) + " melee damage.");
+        System.out.println("Queen Bee deals " + netDamage(Integer.parseInt(statsarray[1])) + " ranged damage.");
+    }
+
+    public void skeletron() {
+        String stats = bosses.getStats().get(5).get(1);
+        String[] statsarray = stats.split(",", 0);
+        System.out.println("Skeletron head deals " + netDamage(Integer.parseInt(statsarray[0])) + " damage.");
+        System.out.println("Skeletron limbs deal " + netDamage(Integer.parseInt(statsarray[1])) + " damage.");
+    }
+
+    public void wallOfFlesh() {
+        String stats = bosses.getStats().get(6).get(1);
+        String[] statsarray = stats.split(",", 0);
+        System.out.println("Wall of Flesh deals " + netDamage(Integer.parseInt(statsarray[0])) + " melee damage.");
+        System.out.println("Wall of Flesh deals " + netDamage(Integer.parseInt(statsarray[1])) + "-"
+                + netDamage(Integer.parseInt(statsarray[2])) + " ranged damage, variable by remaining health.");
+        System.out.println("The Hungry deal " + netDamage(Integer.parseInt(statsarray[3]))
+                + "-" + netDamage(Integer.parseInt(statsarray[4])) + " melee damage, variable by remaining health.");
+    }
 
     public int netDamage (double damage) {
         double doubledamage = Math.floor(damage-(defense*0.75));
