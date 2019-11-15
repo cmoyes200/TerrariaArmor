@@ -8,6 +8,9 @@ public class Main {
 
     public static void main (String args[]) {
         Main main = new Main();
+        DataAccess data = new DataAccess();
+        Bosses bosses = new Bosses();
+
 
         while (finished !=true){
             System.out.println("Enter name of boss with no spaces e.g.'eyeofcthulhu': ");
