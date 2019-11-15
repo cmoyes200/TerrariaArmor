@@ -9,6 +9,7 @@ public class Main {
     public static void main (String args[]) {
         Main main = new Main();
         DataAccess data = new DataAccess();
+        data.load();
         Bosses bosses = new Bosses();
 
 

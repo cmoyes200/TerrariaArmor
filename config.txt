@@ -1,1 +1,2 @@
-test text
+kingslime=2,7,4,5
+skeletron=3,6,7,8
