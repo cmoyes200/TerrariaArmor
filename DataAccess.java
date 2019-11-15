@@ -13,7 +13,7 @@ public class DataAccess {
             String[] stats;
 
             String line = in.readLine();
-            String linearray[] = line.split("=", 1);
+            String linearray[] = line.split("=", 2);
             line = linearray[line.length()-1];
             System.out.println(line);
 
